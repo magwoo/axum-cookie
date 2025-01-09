@@ -117,17 +117,22 @@ where
     fn call(&mut self, mut req: Request<ReqBody>) -> Self::Future {
         let cookie = req
             .headers()
-            .get_all(axum::http::header::COOKIE)
-            .iter()
-            .flat_map(|value| value.to_str().ok())
-            .collect::<String>();
+            .get(axum::http::header::COOKIE)
+            .map(|h| h.to_str())
+            .unwrap_or(Ok(""))
+            .map(|c| c.to_owned());
 
-        let manager = match self.strict {
-            false => CookieJar::parse(cookie),
-            true => CookieJar::parse_strict(cookie),
-        }
-        .map(CookieManager::new)
-        .map_err(|e| (StatusCode::BAD_REQUEST, e.to_string()));
+        let manager = cookie
+            .map(|cookie| {
+                match self.strict {
+                    false => CookieJar::parse(cookie),
+                    true => CookieJar::parse_strict(cookie),
+                }
+                .map(CookieManager::new)
+                .map_err(|e| (StatusCode::BAD_REQUEST, e.to_string()))
+            })
+            .map_err(|e| (StatusCode::BAD_REQUEST, e.to_string()))
+            .and_then(|inner| inner);
 
         req.extensions_mut().insert(manager.clone());
 
