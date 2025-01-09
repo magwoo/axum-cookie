@@ -57,7 +57,8 @@ version = "0.1.0-alpha"
 dependencies = [
  "axum",
  "cookie-rs",
- "tower",
+ "tower-layer",
+ "tower-service",
 ]
 
 [[package]]

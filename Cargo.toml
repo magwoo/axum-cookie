@@ -6,6 +6,7 @@ description = "Cookie extractor middleware for axum"
 license = "MIT"
 
 [dependencies]
-axum = "0.8.1"
-cookie-rs = "0.2.0"
-tower = "0.5.2"
+axum = "0.8"
+cookie-rs = "0.2"
+tower-layer = "0.3"
+tower-service = "0.3"

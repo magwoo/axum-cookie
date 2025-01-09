@@ -7,7 +7,8 @@ use std::future::Future;
 use std::pin::Pin;
 use std::sync::{Arc, Mutex};
 use std::task::{Context, Poll};
-use tower::{Layer, Service};
+use tower_layer::Layer;
+use tower_service::Service;
 
 #[derive(Clone)]
 pub struct CookieManager {
@@ -65,7 +66,7 @@ impl<S> FromRequestParts<S> for CookieManager {
                 .cloned()
                 .ok_or((
                     StatusCode::INTERNAL_SERVER_ERROR,
-                    "Can't extract cookies. Is `CookieLayer` enabled?".to_string(),
+                    "CookieLayer is not initialized".to_string(),
                 ))?
         })
     }
