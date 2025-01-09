@@ -10,3 +10,7 @@ axum = "0.8"
 cookie-rs = "0.2"
 tower-layer = "0.3"
 tower-service = "0.3"
+
+[dev-dependencies]
+tokio = { version = "1.43", features = ["macros"] }
+tower = "0.5"
