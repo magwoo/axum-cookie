@@ -4,6 +4,7 @@ version = "0.1.0-alpha"
 edition = "2021"
 description = "Cookie extractor middleware for axum"
 license = "MIT"
+readme = "./README.md"
 
 [dependencies]
 axum = "0.8"
