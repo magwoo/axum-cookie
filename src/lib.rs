@@ -10,42 +10,72 @@ use std::task::{Context, Poll};
 use tower_layer::Layer;
 use tower_service::Service;
 
+/// Manages cookies using a thread-safe `CookieJar`.
+/// This struct provides methods to add, remove, and retrieve cookies,
+/// as well as generate `Set-Cookie` headers for HTTP responses.
 #[derive(Clone)]
 pub struct CookieManager {
     jar: Arc<Mutex<CookieJar<'static>>>,
 }
 
 impl CookieManager {
+    /// Creates a new instance of `CookieManager` with the specified cookie jar.
+    ///
+    /// # Arguments
+    /// * `jar` - The initial cookie jar to manage cookies.
     pub fn new(jar: CookieJar<'static>) -> Self {
         Self {
             jar: Arc::new(Mutex::new(jar)),
         }
     }
 
+    /// Adds a cookie to the jar.
+    ///
+    /// # Arguments
+    /// * `cookie` - The cookie to add to the jar.
     pub fn add(&self, cookie: Cookie<'static>) {
         let mut jar = self.jar.lock().unwrap();
 
         jar.add(cookie);
     }
 
+    /// Removes a cookie from the jar by its name.
+    ///
+    /// # Arguments
+    /// * `name` - The name of the cookie to remove.
     pub fn remove(&self, name: &str) {
         let mut jar = self.jar.lock().unwrap();
 
         jar.remove(name.to_owned());
     }
 
+    /// Retrieves a cookie from the jar by its name.
+    ///
+    /// # Arguments
+    /// * `name` - The name of the cookie to retrieve.
+    ///
+    /// # Returns
+    /// * `Option<Cookie<'static>>` - The cookie if found, otherwise `None`.
     pub fn get(&self, name: &str) -> Option<Cookie<'static>> {
         let jar = self.jar.lock().unwrap();
 
         jar.get(name).cloned()
     }
 
+    /// Returns all cookies in the jar as a set.
+    ///
+    /// # Returns
+    /// * `BTreeSet<Cookie<'static>>` - A set of all cookies currently in the jar.
     pub fn cookie(&self) -> BTreeSet<Cookie<'static>> {
         let jar = self.jar.lock().unwrap();
 
         jar.cookie().into_iter().cloned().collect()
     }
 
+    /// Generates `Set-Cookie` header value for all cookies in the jar.
+    ///
+    /// # Returns
+    /// * `Vec<String>` - A vector of `Set-Cookie` header string value.
     pub fn into_set_cookie_headers(&self) -> Vec<String> {
         let jar = self.jar.lock().unwrap();
         jar.as_header_values()
@@ -72,12 +102,15 @@ impl<S> FromRequestParts<S> for CookieManager {
     }
 }
 
+/// A middleware layer for processing cookies.
+/// This layer integrates cookie management into the middleware stack.
 #[derive(Clone, Default)]
 pub struct CookieLayer {
     strict: bool,
 }
 
 impl CookieLayer {
+    /// Creates a layer with strict cookie parsing enabled.
     pub fn strict() -> Self {
         Self { strict: true }
     }
@@ -94,6 +127,8 @@ impl<S> Layer<S> for CookieLayer {
     }
 }
 
+/// Middleware for handling HTTP requests and responses with cookies.
+/// This middleware parses cookies from requests and adds `Set-Cookie` headers to responses.
 #[derive(Clone)]
 pub struct CookieMiddleware<S> {
     strict: bool,
