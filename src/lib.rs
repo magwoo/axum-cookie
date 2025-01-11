@@ -77,10 +77,12 @@
 //!
 //! ## License
 //! This project is licensed under the MIT License.
-use axum::extract::FromRequestParts;
-use axum::http::request::Parts;
-use axum::http::{HeaderValue, Request, Response, StatusCode};
+use axum_core::extract::{FromRequestParts, Request};
+use axum_core::response::Response;
 use cookie_rs::{Cookie, CookieJar};
+use http::header::{COOKIE, SET_COOKIE};
+use http::request::Parts;
+use http::{HeaderValue, StatusCode};
 use std::collections::BTreeSet;
 use std::future::Future;
 use std::pin::Pin;
@@ -242,7 +244,7 @@ where
     fn call(&mut self, mut req: Request<ReqBody>) -> Self::Future {
         let cookie = req
             .headers()
-            .get(axum::http::header::COOKIE)
+            .get(COOKIE)
             .map(|h| h.to_str())
             .unwrap_or(Ok(""))
             .map(|c| c.to_owned());
@@ -268,10 +270,9 @@ where
 
             if let Ok(manager) = manager {
                 for cookie in manager.as_header_value() {
-                    response.headers_mut().append(
-                        axum::http::header::SET_COOKIE,
-                        HeaderValue::from_str(&cookie).unwrap(),
-                    );
+                    response
+                        .headers_mut()
+                        .append(SET_COOKIE, HeaderValue::from_str(&cookie).unwrap());
                 }
             }
 

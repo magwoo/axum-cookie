@@ -7,8 +7,9 @@ license = "MIT"
 readme = "./README.md"
 
 [dependencies]
-axum = "0.8"
+axum-core = "0.5"
 cookie-rs = "0.2"
+http = "1.2"
 tower-layer = "0.3"
 tower-service = "0.3"
 
