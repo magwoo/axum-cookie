@@ -18,7 +18,7 @@ Add the library to your `Cargo.toml`:
 ```
 
 ### Example: Basic Integration
-```
+```rust
 use axum::{Router, routing::get};
 use axum_cookie::prelude::*;
 async fn handler(cookie: CookieManager) -> &'static str {
