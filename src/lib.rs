@@ -165,8 +165,9 @@ impl CookieManager {
     ///
     /// # Returns
     /// * `Vec<String>` - A vector of `Set-Cookie` header string value.
-    pub fn into_set_cookie_headers(&self) -> Vec<String> {
+    pub fn as_header_value(&self) -> Vec<String> {
         let jar = self.jar.lock().unwrap();
+
         jar.as_header_values()
     }
 }
@@ -266,7 +267,7 @@ where
             let mut response = fut.await?;
 
             if let Ok(manager) = manager {
-                for cookie in manager.into_set_cookie_headers() {
+                for cookie in manager.as_header_value() {
                     response.headers_mut().append(
                         axum::http::header::SET_COOKIE,
                         HeaderValue::from_str(&cookie).unwrap(),
