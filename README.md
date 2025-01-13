@@ -52,7 +52,7 @@ let app: Router<()> = Router::new()
 - `CookieManager::remove` - Removes a cookie by its name.
 - `CookieManager::get` - Retrieves a cookie by its name.
 - `CookieManager::cookie` - Returns all cookies in the jar.
-- `CookieManager::into_set_cookie_headers` - Generates `Set-Cookie` header value for all cookies in the jar.
+- `CookieManager::as_header_value` - Generates `Set-Cookie` header value for all cookies in the jar.
 
 ### CookieLayer
 - `CookieLayer::default` - Creates a layer with lenient cookie parsing.
