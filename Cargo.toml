@@ -4,6 +4,7 @@ version = "0.1.0"
 edition = "2021"
 description = "Cookie extractor middleware for axum"
 license = "MIT"
+keywords = ["cookie", "http", "web", "axum", "middleware"]
 repository = "https://github.com/magwoo/axum-cookie"
 readme = "./README.md"
 
