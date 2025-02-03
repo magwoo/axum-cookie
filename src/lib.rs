@@ -46,7 +46,19 @@ impl CookieManager {
     ///
     /// # Arguments
     /// * `cookie` - The cookie to add to the jar.
-    pub fn add(&self, cookie: Cookie<'static>) {
+    pub fn add<C: Into<Cookie<'static>>>(&self, cookie: C) {
+        let mut jar = self.jar.lock().unwrap();
+
+        jar.add(cookie);
+    }
+
+    /// Adds a cookie to the jar.
+    ///
+    /// # Arguments
+    /// * `cookie` - The cookie to add to the jar.
+    ///
+    /// > alias for `CookieManager::add`
+    pub fn set<C: Into<Cookie<'static>>>(&self, cookie: C) {
         let mut jar = self.jar.lock().unwrap();
 
         jar.add(cookie);
