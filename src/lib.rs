@@ -59,9 +59,7 @@ impl CookieManager {
     ///
     /// > alias for `CookieManager::add`
     pub fn set<C: Into<Cookie<'static>>>(&self, cookie: C) {
-        let mut jar = self.jar.lock().unwrap();
-
-        jar.add(cookie);
+        self.add(cookie);
     }
 
     /// Removes a cookie from the jar by its name.
