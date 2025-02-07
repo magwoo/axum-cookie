@@ -10,7 +10,7 @@ readme = "./README.md"
 
 [dependencies]
 axum-core = "0.5"
-cookie-rs = "0.2"
+cookie-rs = "0.3"
 http = "1"
 tower-layer = "0.3"
 tower-service = "0.3"
