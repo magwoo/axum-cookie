@@ -21,15 +21,18 @@ Add the library to your `Cargo.toml`:
 ```rust
 use axum::{Router, routing::get};
 use axum_cookie::prelude::*;
+
 async fn handler(cookie: CookieManager) -> &'static str {
     // Retrieve a cookie
     if let Some(cookie) = cookie.get("session") {
         println!("Cookie value: {}", cookie.value());
     }
+
     // Add a cookie
     cookie.add(Cookie::new("session", "abc123"));
     "Hello, cookies!"
 }
+
 let app: Router<()> = Router::new()
     .route("/", get(handler))
     .layer(CookieLayer::default());
@@ -39,6 +42,7 @@ let app: Router<()> = Router::new()
 ```rust
 use axum::{Router, routing::get};
 use axum_cookie::CookieLayer;
+
 let app: Router<()> = Router::new()
     .route("/", get(|| async { "Strict mode enabled" }))
     .layer(CookieLayer::strict());
