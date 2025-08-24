@@ -2,8 +2,14 @@
 //!
 //! Sets `counter` cookie on first request, and increments it on subsequent requests.
 //!
+//! Run with
+//!
+//! ```not_rust
+//! cargo run -p example-hello-cookie
+//! ```
 
-use axum::{routing::get, Router};
+use axum::Router;
+use axum::routing::get;
 use axum_cookie::prelude::*;
 
 #[tokio::main]
@@ -32,6 +38,5 @@ async fn handler(cookie: CookieManager) -> String {
     // Set cookie
     cookie.add(Cookie::new("counter", num.to_string()));
     //Response
-    let s = format!("Hello from axum-cookie! Counter: {}", num);
-    s.to_owned()
+    format!("Hello from axum-cookie! Counter: {}", num)
 }
