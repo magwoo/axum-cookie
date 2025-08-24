@@ -39,5 +39,5 @@ async fn handler(cookie: CookieManager) -> String {
     // Set cookie
     cookie.add(Cookie::new("counter", num.to_string()));
     //Response
-    format!("Hello from axum-cookie! Counter: {}", num)
+    format!("Hello from axum-cookie! Counter: {num}")
 }
