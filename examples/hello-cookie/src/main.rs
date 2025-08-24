@@ -1,4 +1,6 @@
-//! Basic example of making use of `axum-cookie` in lenient mode
+//! Basic example of making use of `axum-cookie` in `lenient mode`.
+//!
+//! Sets `counter` cookie on first request, and increments it on subsequent requests.
 //!
 
 use axum::{routing::get, Router};
@@ -30,7 +32,6 @@ async fn handler(cookie: CookieManager) -> String {
     // Set cookie
     cookie.add(Cookie::new("counter", num.to_string()));
     //Response
-    "Hello from axum-cookie! Counter: ".to_string()
-        + &num.to_string()
-        .to_owned()
+    let s = format!("Hello from axum-cookie! Counter: {}", num);
+    s.to_owned()
 }
