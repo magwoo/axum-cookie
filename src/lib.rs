@@ -177,10 +177,11 @@ where
     fn call(&mut self, mut req: Request<ReqBody>) -> Self::Future {
         let cookie = req
             .headers()
-            .get(COOKIE)
+            .get_all(COOKIE)
+            .iter()
             .map(|h| h.to_str())
-            .unwrap_or(Ok(""))
-            .map(|c| c.to_owned());
+            .collect::<Result<Box<[_]>, _>>()
+            .map(|c| c.join(";"));
 
         let manager = cookie
             .map(|cookie| {
