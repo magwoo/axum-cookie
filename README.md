@@ -14,7 +14,7 @@ Add the library to your `Cargo.toml`:
 ```diff
 [dependencies]
 ...
-+ axum-cookie = "0.2.3"
++ axum-cookie = "0.2.4"
 ```
 
 ### Example: Basic Integration
